@@ -27,6 +27,7 @@ def main_function():
         return reder_template("show.html")
         
 
-
+def show():
+    return render_template("show.html)
 if __name__ == '__main__':
     app.run(debug=True)
