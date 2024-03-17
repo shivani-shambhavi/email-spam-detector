@@ -121,12 +121,12 @@
     <!-- Input form -->
     <div class="container">
         <h2>Type an Email here to check if it is Spam or Ham</h2>
-        <form action="/" method="POST">
+        <form id="emailForm">
             <div class="form-floating">
                 <textarea class="form-control" placeholder="Write your mail here.." id="email" name="email"
                     style="height: 100px"></textarea>
                 <label for="email">Write your email here...</label>
-                <button class="w-100 btn btn-lg btn-primary">Submit</button>
+                <button type="submit" class="w-100 btn btn-lg btn-primary">Submit</button>
             </div>
         </form>
     </div>
@@ -139,7 +139,7 @@
 
     <!-- JavaScript code to interact with Flask backend -->
     <script>
-        document.querySelector('form').onsubmit = async function (event) {
+        document.querySelector('#emailForm').onsubmit = async function (event) {
             event.preventDefault();
             const formData = new FormData(event.target);
             const response = await fetch('/', {
