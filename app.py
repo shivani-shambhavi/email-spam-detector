@@ -21,8 +21,11 @@ def main_function():
 
         return render_template("show.html", prediction=output)
 
-    else:
+    elif:
         return render_template("index.html")
+    else:
+        return reder_template("show.html")
+        
 
 
 if __name__ == '__main__':
