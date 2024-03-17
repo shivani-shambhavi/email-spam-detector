@@ -1,125 +1,155 @@
-from flask import Flask, render_template, request
-import pickle
-
-app = Flask(__name__)
-
-pipe = pickle.load(open("Naive_model.pkl", "rb"))
-
-
-@app.route('/', methods=["GET", "POST"])
-def main_function():
-    if request.method == "POST":
-        text = request.form
-        # print(text)
-        emails = text['email']
-        print(emails)
-
-        list_email = [emails]
-        # print(list_email)
-        output = pipe.predict(list_email)[0]
-        print(output)
-
-        return render_template("show.html", prediction=output)
-
-    else:
-        return render_template("index.html")
-  
-
-def show():
-    return render_template("show.html)
-if __name__ == '__main__':
-    app.run(debug=True)
-
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Spam Classifier</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(45deg, #f6d365, #fda085);
+            color: black;
+            padding-top: 20px;
+        }
 
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
 
-  <title>Email Spam Classifier</title>
+        .navbar {
+            background-color: #ff69b4;
+        }
 
-  <style>
-    body {
-      background: linear-gradient(45deg, #f6d365, #fda085);
-      font-family: Arial, sans-serif;
-      color: black;
-      padding-top: 20px;
-    }
+        .navbar-brand {
+            color: black;
+        }
 
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-    }
+        h2 {
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
 
-    .navbar {
-      background-color: #ff69b4; /* Pink color for navbar background */
-    }
+        form {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 5px;
+            background-color: rgba(255, 255, 255, 0.9);
+        }
 
-    .navbar-brand {
-      color: black;
-    }
+        textarea {
+            resize: none;
+        }
 
-    h2 {
-      text-align: center;
-    }
+        button {
+            margin-top: 10px;
+        }
 
-    form {
-      margin-top: 20px;
-      padding: 20px;
-      border-radius: 5px;
-      background-color: rgba(255, 255, 255, 0.9);
-    }
+        button:hover {
+            background-color: #007bff;
+        }
 
-    textarea {
-      resize: none;
-    }
+        /* Gradient Text Color */
+        .gradient-text {
+            background: linear-gradient(45deg, #f6d365, #fda085);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
-    button {
-      margin-top: 10px;
-    }
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #343a40;
+            color: white;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+        }
 
-    button:hover {
-      background-color: #007bff;
-    }
+        .footer-description {
+            margin: 0;
+        }
 
-    /* Gradient Text Color */
-    .gradient-text {
-      background: linear-gradient(45deg, #f6d365, #fda085);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-  </style>
+        .btn-go-back {
+            display: block;
+            margin: 0 auto;
+            width: 150px;
+        }
 
+        .gif {
+            max-width: 100%;
+            height: 150px;
+            margin-bottom: 20px;
+        }
+
+        .danger {
+            color: #dc3545;
+        }
+
+        .safe {
+            color: #28a745;
+        }
+
+        .made-by {
+            color: white;
+            padding: 2px 5px;
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 
 <body>
-
-  <div class="container">
     <!-- Navbar -->
-    <nav class="navbar navbar-dark bg-pink">
-      <div class="container-fluid">
-        <a class="navbar-brand text-dark" href="#">Email Spam Classifier</a>
-        <a class="navbar-brand text-dark" href="#">Created by **SHIVANI SHAMBHAVI**</a>
-      </div>
-    </nav>
+    <div class="container">
+        <nav class="navbar navbar-dark bg-pink">
+            <div class="container-fluid">
+                <a class="navbar-brand text-dark" href="#">Email Spam Classifier</a>
+                <a class="navbar-brand text-dark" href="#">Created by **SHIVANI SHAMBAVI**</a>
+            </div>
+        </nav>
+    </div>
 
     <!-- Input form -->
-    <h2 style="margin-top: 20px; margin-bottom: 20px;">Type an Email here to check it is Spam or Ham</h2>
-    <form action="/" method="POST">
-      <div class="form-floating">
-        <textarea class="form-control" placeholder="Write your mail here.." id="email" name="email" style="height: 100px"></textarea>
-        <label for="email">Write your email here...</label>
-        <button class="w-100 btn btn-lg btn-primary">Submit</button>
-      </div>
-    </form>
-  </div>
+    <div class="container">
+        <h2>Type an Email here to check if it is Spam or Ham</h2>
+        <form action="/" method="POST">
+            <div class="form-floating">
+                <textarea class="form-control" placeholder="Write your mail here.." id="email" name="email"
+                    style="height: 100px"></textarea>
+                <label for="email">Write your email here...</label>
+                <button class="w-100 btn btn-lg btn-primary">Submit</button>
+            </div>
+        </form>
+    </div>
 
+    <!-- Display prediction result -->
+    <div class="container">
+        <h2>Classification Result</h2>
+        <div id="result"></div>
+    </div>
+
+    <!-- JavaScript code to interact with Flask backend -->
+    <script>
+        document.querySelector('form').onsubmit = async function (event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const response = await fetch('/', {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.text();
+            document.getElementById('result').innerHTML = result;
+        };
+    </script>
 </body>
 
 </html>
